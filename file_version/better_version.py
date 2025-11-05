@@ -20,9 +20,9 @@ def dictload():
 while True:
     try:
         print('\nЧто сделать нужно?')
-        input_command = input('Добавить/Удалить/Психануть/Найти/Заменить: ').strip().lower()
+        input_command = input('Добавить/Удалить/Психануть/Найти/Заменить/Посмотреть: ').strip().lower()
         dictload()
-        if input_command == 'добавить' or input_command == 'd':  # добавление книги
+        if input_command == 'добавить' or input_command == 'd':
             try:
                 name = input('Название книги: ')
                 if name in work_dict:
@@ -33,8 +33,6 @@ while True:
             except ValueError:
                 print('\nГод выпуска - целое число,\n'
                       'Название - строка!')
-            finally:
-                print(work_dict)                    # отладка удалить
         elif input_command == 'удалить' or input_command == 'u':
             input_command = input('Удалить по Номер/Название: ').strip().lower()
             if input_command == 'номер' or input_command == 'no':
@@ -46,7 +44,6 @@ while True:
                 except IndexError:
                     print('\nНет столько книг в списке')
             elif input_command == 'название' or input_command == 'na':
-                print(work_dict)                    # отладка удалить
                 try:
                     del work_dict[input('Название книги: ')]
                     filewrite(work_dict)
@@ -93,14 +90,20 @@ while True:
         elif input_command == 'заменить' or input_command == 'z':
             try:
                 input_command = int(input('Номер книги: '))
-                # vals_list = list(work_dict.values())[input_command]
-                work_dict[input('\nНовое название книги: ')] = work_dict[list(work_dict.keys())[input_command]]
-                work_dict[list(work_dict.keys())[input_command]] = int(input('Новый год (через два месяца): '))
+                keys = list(work_dict.keys())
+                vals = list(work_dict.values())
+                keys[input_command] = input('\nНовое название книги:  ')
+                vals[input_command] = int(input('\nНовый год (через 2 месяца):  '))
+                work_dict.clear()
+                for i in range(len(keys)):
+                    work_dict[keys[i]] = vals[i]
                 filewrite(work_dict)
             except ValueError:
-                print('\nНамбер ис интеджер')
+                print('\nНамбер ис интеджер, ворд ис стринг!')
             except IndexError:
                 print('\nНет столько книг в списке')
+        elif input_command == 'посмотреть' or input_command == 'po':
+            print(work_dict)
         else:
             print('\nНе понял тебя')
     except KeyboardInterrupt:
